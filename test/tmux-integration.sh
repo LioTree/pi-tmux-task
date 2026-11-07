@@ -31,10 +31,11 @@ export PI_TMUX_TEST_SOCKET="$test_dir/socket"
 export PI_TMUX_TEST_BINARY="$tmux_binary"
 cat > "$test_dir/bin/tmux" <<'WRAPPER'
 #!/usr/bin/env bash
-exec "$PI_TMUX_TEST_BINARY" -S "$PI_TMUX_TEST_SOCKET" "$@"
+exec "$PI_TMUX_TEST_BINARY" -f /dev/null -S "$PI_TMUX_TEST_SOCKET" "$@"
 WRAPPER
 chmod +x "$test_dir/bin/tmux"
 export PATH="$test_dir/bin:$PATH"
+unset TMUX TMUX_PANE
 cleanup_all() {
   tmux kill-server >/dev/null 2>&1 || true
   rm -rf "$test_dir"
